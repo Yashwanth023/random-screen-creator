@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Home, Wallet, Snowflake, Copy, WifiIcon, Battery, Signal } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -97,20 +96,27 @@ const PaymentModeSelector = () => {
           </Link>
         </motion.div>
 
-        <div className="mt-8">
+        <div className="mt-8 pb-24">
           <h2 className="text-lg font-semibold mb-4">Recent Transactions</h2>
           <div className="space-y-4">
             {recentTransactions.map(transaction => (
-              <div 
-                key={transaction.id} 
-                className="bg-secondary/50 p-4 rounded-lg flex justify-between items-center"
+              <Link 
+                to="/transaction-details" 
+                state={{ transaction }}
+                key={transaction.id}
               >
-                <div>
-                  <p className="font-medium">{transaction.name}</p>
-                  <p className="text-xs opacity-60">{transaction.date}</p>
-                </div>
-                <p className="text-accent">${transaction.amount}</p>
-              </div>
+                <motion.div 
+                  className="bg-secondary/50 p-4 rounded-lg flex justify-between items-center hover:bg-secondary/70 transition-colors border border-white/10"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
+                  <div>
+                    <p className="font-medium">{transaction.name}</p>
+                    <p className="text-xs opacity-60">{transaction.date}</p>
+                  </div>
+                  <p className="text-accent font-medium">${transaction.amount}</p>
+                </motion.div>
+              </Link>
             ))}
           </div>
         </div>
@@ -118,7 +124,6 @@ const PaymentModeSelector = () => {
 
       <nav className="fixed bottom-0 left-0 right-0">
         <div className="relative">
-          {/* Status Bar */}
           <div className="fixed top-0 left-0 right-0 flex justify-between items-center px-6 py-2 bg-background/5 backdrop-blur-sm">
             <span className="text-sm font-medium">
               {currentTime.toLocaleTimeString('en-US', { 
@@ -134,7 +139,6 @@ const PaymentModeSelector = () => {
             </div>
           </div>
 
-          {/* Curved Navigation - Now facing downward */}
           <div className="absolute -top-12 left-0 right-0">
             <svg
               viewBox="0 0 1440 120"
