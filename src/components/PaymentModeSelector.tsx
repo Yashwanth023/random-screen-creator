@@ -10,6 +10,7 @@ const PaymentModeSelector = () => {
   const [activeTab, setActiveTab] = useState("home");
   const [paymentMode, setPaymentMode] = useState("card");
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [isFrozen, setIsFrozen] = useState(false);
   const [walletBalance] = useState(faker.finance.amount({ min: 1000, max: 10000, dec: 2 }));
   const [recentTransactions] = useState([
     {
@@ -44,7 +45,8 @@ const PaymentModeSelector = () => {
     if (tab === "wallet") {
       toast.info(`Your wallet balance: $${walletBalance}`);
     } else if (tab === "ginie") {
-      toast.info("AI assistant is here to help!");
+      setIsFrozen(!isFrozen);
+      toast.info(isFrozen ? "Card unfrozen" : "Card frozen");
     }
   };
 
@@ -52,7 +54,7 @@ const PaymentModeSelector = () => {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="min-h-screen bg-background p-6 pb-24"
+      className={`min-h-screen bg-background p-6 pb-24 ${isFrozen ? 'frozen' : ''}`}
     >
       <div className="pt-12">
         <h1 className="text-2xl font-bold mb-2">select payment mode</h1>
@@ -85,6 +87,9 @@ const PaymentModeSelector = () => {
           <Link to="/card-details">
             <div className="card relative aspect-[1.586/1] bg-gradient-to-br from-secondary to-black rounded-xl overflow-hidden border border-white/10">
               <div className="absolute inset-0 bg-[url('/lovable-uploads/ef68bb8a-5300-4470-8f8d-4b1bf722e0d8.png')] bg-cover bg-center opacity-30" />
+              {isFrozen && (
+                <div className="absolute inset-0 bg-[#9F9EA1]/50 backdrop-blur-lg" />
+              )}
               <div className="absolute bottom-4 right-4">
                 <Snowflake className="text-accent" size={24} />
               </div>
@@ -129,7 +134,7 @@ const PaymentModeSelector = () => {
             </div>
           </div>
 
-          {/* Curved Navigation */}
+          {/* Curved Navigation - Now facing downward */}
           <div className="absolute -top-12 left-0 right-0">
             <svg
               viewBox="0 0 1440 120"
@@ -137,7 +142,7 @@ const PaymentModeSelector = () => {
               preserveAspectRatio="none"
             >
               <path
-                d="M0,0 C480,120 960,120 1440,0 L1440,120 L0,120 Z"
+                d="M0,120 C480,0 960,0 1440,120 L1440,120 L0,120 Z"
               />
             </svg>
           </div>
