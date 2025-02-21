@@ -51,9 +51,20 @@
 }
 
 .bottom-nav-item {
-  @apply flex flex-col items-center justify-center gap-1 text-xs font-medium opacity-60 transition-opacity duration-200;
+  @apply flex flex-col items-center justify-center transition-all duration-200 relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
 }
 
 .bottom-nav-item.active {
-  @apply opacity-100;
+  @apply scale-110;
+}
+
+/* Add backdrop-blur transition */
+.backdrop-blur-lg {
+  transition: backdrop-filter 0.3s ease;
+}
+
+/* When the app is frozen, make blur transparent */
+.frozen .backdrop-blur-lg {
+  backdrop-filter: blur(0px);
 }

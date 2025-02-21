@@ -1,14 +1,15 @@
 
 import { motion } from "framer-motion";
-import { Home, Wallet, Snowflake, Copy } from "lucide-react";
+import { Home, Wallet, Snowflake, Copy, WifiIcon, Battery, Signal } from "lucide-react";
 import { Link } from "react-router-dom";
 import { faker } from "@faker-js/faker";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 const PaymentModeSelector = () => {
   const [activeTab, setActiveTab] = useState("home");
   const [paymentMode, setPaymentMode] = useState("card");
+  const [currentTime, setCurrentTime] = useState(new Date());
   const [walletBalance] = useState(faker.finance.amount({ min: 1000, max: 10000, dec: 2 }));
   const [recentTransactions] = useState([
     {
@@ -24,6 +25,14 @@ const PaymentModeSelector = () => {
       date: faker.date.recent().toLocaleDateString(),
     },
   ]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const handlePaymentModeChange = (mode: string) => {
     setPaymentMode(mode);
@@ -104,34 +113,54 @@ const PaymentModeSelector = () => {
 
       <nav className="fixed bottom-0 left-0 right-0">
         <div className="relative">
-          <div className="absolute -top-6 left-0 right-0 h-6 bg-secondary/80 backdrop-blur-lg">
-            <div className="h-full w-full bg-secondary/80" style={{
-              borderTopLeftRadius: '24px',
-              borderTopRightRadius: '24px'
-            }} />
+          {/* Status Bar */}
+          <div className="fixed top-0 left-0 right-0 flex justify-between items-center px-6 py-2 bg-background/5 backdrop-blur-sm">
+            <span className="text-sm font-medium">
+              {currentTime.toLocaleTimeString('en-US', { 
+                hour: 'numeric', 
+                minute: '2-digit',
+                hour12: true 
+              })}
+            </span>
+            <div className="flex items-center gap-2">
+              <Signal size={16} />
+              <WifiIcon size={16} />
+              <Battery size={16} />
+            </div>
           </div>
+
+          {/* Curved Navigation */}
+          <div className="absolute -top-12 left-0 right-0">
+            <svg
+              viewBox="0 0 1440 120"
+              className="w-full h-12 fill-secondary/80 backdrop-blur-lg"
+              preserveAspectRatio="none"
+            >
+              <path
+                d="M0,0 C480,120 960,120 1440,0 L1440,120 L0,120 Z"
+              />
+            </svg>
+          </div>
+
           <div className="bg-secondary/80 backdrop-blur-lg border-t border-white/5 p-4">
-            <div className="flex justify-around items-center max-w-md mx-auto">
+            <div className="flex justify-around items-center max-w-md mx-auto gap-4">
               <button 
-                className={`bottom-nav-item ${activeTab === 'home' ? 'active' : ''}`}
+                className={`bottom-nav-item ${activeTab === 'home' ? 'active' : ''} bg-white shadow-lg rounded-full p-4 w-[60px] h-[60px]`}
                 onClick={() => handleTabChange('home')}
               >
-                <Home size={20} />
-                <span>home</span>
+                <Home size={24} className="text-black" />
               </button>
               <button 
-                className={`bottom-nav-item ${activeTab === 'wallet' ? 'active' : ''}`}
+                className={`bottom-nav-item ${activeTab === 'wallet' ? 'active' : ''} bg-white shadow-lg rounded-full p-4 w-[60px] h-[60px]`}
                 onClick={() => handleTabChange('wallet')}
               >
-                <Wallet size={20} />
-                <span>yolo pay</span>
+                <Wallet size={24} className="text-black" />
               </button>
               <button 
-                className={`bottom-nav-item ${activeTab === 'ginie' ? 'active' : ''}`}
+                className={`bottom-nav-item ${activeTab === 'ginie' ? 'active' : ''} bg-white shadow-lg rounded-full p-4 w-[60px] h-[60px]`}
                 onClick={() => handleTabChange('ginie')}
               >
-                <Snowflake size={20} />
-                <span>ginie</span>
+                <Snowflake size={24} className="text-black" />
               </button>
             </div>
           </div>
